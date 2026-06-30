@@ -32,64 +32,21 @@
     ],
     "trigger": [
       {
-        "name": "Consent Initialization - All Pages",
-        "triggerId": "3020000004",
-        "type": "CONSENT_INIT"
-      },
-      {
-        "name": "CE - cmplz_consent_changed",
+        "name": "CE - cmplz_event (any category)",
         "triggerId": "3020000001",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
           {
-            "type": "EQUALS",
+            "type": "MATCH_REGEX",
             "parameter": [
               {"type": "TEMPLATE", "key": "arg0", "value": "{{_event}}"},
-              {"type": "TEMPLATE", "key": "arg1", "value": "cmplz_consent_changed"}
-            ]
-          }
-        ]
-      },
-      {
-        "name": "CE - cmplz_before_cookiebanner",
-        "triggerId": "3020000002",
-        "type": "CUSTOM_EVENT",
-        "customEventFilter": [
-          {
-            "type": "EQUALS",
-            "parameter": [
-              {"type": "TEMPLATE", "key": "arg0", "value": "{{_event}}"},
-              {"type": "TEMPLATE", "key": "arg1", "value": "cmplz_before_cookiebanner"}
+              {"type": "TEMPLATE", "key": "arg1", "value": "cmplz_event_.*"}
             ]
           }
         ]
       }
     ],
     "tag": [
-      {
-        "name": "Consent Mode v2 - Default",
-        "type": "html",
-        "tagId": "3020000005",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "html",
-            "value": "<script>\nwindow.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('consent', 'default', {\n  'ad_storage':              'denied',\n  'ad_user_data':            'denied',\n  'ad_personalization':      'denied',\n  'analytics_storage':       'denied',\n  'functionality_storage':   'denied',\n  'personalization_storage': 'denied',\n  'security_storage':        'granted',\n  'wait_for_update':         500\n});\ngtag('set', 'ads_data_redaction', true);\ngtag('set', 'url_passthrough', true);\n</script>"
-          },
-          {
-            "type": "BOOLEAN",
-            "key": "supportDocumentWrite",
-            "value": "false"
-          }
-        ],
-        "firingTriggerId": [
-          "3020000004"
-        ],
-        "tagFiringOption": "ONCE_PER_EVENT",
-        "consentSettings": {
-          "consentStatus": "NOT_SET"
-        }
-      },
       {
         "name": "Complianz - Consent Mode v2 Update",
         "type": "html",
@@ -107,8 +64,7 @@
           }
         ],
         "firingTriggerId": [
-          "3020000001",
-          "3020000002"
+          "3020000001"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "consentSettings": {
