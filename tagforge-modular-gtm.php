@@ -2,7 +2,7 @@
 /**
  * Plugin Name: TagForge Modular GTM
  * Description: Modular GTM builder for WooCommerce with dynamic modules, stylized product UI, secure timed downloads, email injection, admin test & settings.
- * Version: 5.3.1
+ * Version: 5.3.2
  * Author: Amit Wadhwa
  * Author URI: https://xava.ie
  * License: GPL-2.0+
@@ -12,7 +12,7 @@
  * Update URI: github.com/your-org/tagforge-modular-gtm
  */
 if ( ! defined( 'ABSPATH' ) ) exit;
-define( 'TAGFORGE_VERSION', '5.3.1' );
+define( 'TAGFORGE_VERSION', '5.3.2' );
 define( 'TAGFORGE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TAGFORGE_URL', plugin_dir_url( __FILE__ ) );
 define( 'TAGFORGE_UPLOAD_SUBDIR', 'tagforge' );

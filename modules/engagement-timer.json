@@ -22,28 +22,60 @@
                 "name": "Timer - 30s engagement",
                 "triggerId": "3009000001",
                 "type": "TIMER",
-                "parameter": [
+                "autoEventFilter": [
                     {
-                        "type": "TEMPLATE",
-                        "key": "interval",
-                        "value": "30000"
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {"type": "TEMPLATE", "key": "arg0", "value": "{{Page Path}}"},
+                            {"type": "TEMPLATE", "key": "arg1", "value": "checkout"},
+                            {"type": "BOOLEAN", "key": "negate", "value": "true"}
+                        ]
                     },
                     {
-                        "type": "TEMPLATE",
-                        "key": "limit",
-                        "value": "1"
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {"type": "TEMPLATE", "key": "arg0", "value": "{{Page Path}}"},
+                            {"type": "TEMPLATE", "key": "arg1", "value": "cart"},
+                            {"type": "BOOLEAN", "key": "negate", "value": "true"}
+                        ]
                     },
                     {
-                        "type": "BOOLEAN",
-                        "key": "waitForTags",
-                        "value": "false"
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {"type": "TEMPLATE", "key": "arg0", "value": "{{Page Path}}"},
+                            {"type": "TEMPLATE", "key": "arg1", "value": "order-received"},
+                            {"type": "BOOLEAN", "key": "negate", "value": "true"}
+                        ]
                     },
                     {
-                        "type": "BOOLEAN",
-                        "key": "checkValidation",
-                        "value": "false"
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {"type": "TEMPLATE", "key": "arg0", "value": "{{Page Path}}"},
+                            {"type": "TEMPLATE", "key": "arg1", "value": "thank"},
+                            {"type": "BOOLEAN", "key": "negate", "value": "true"}
+                        ]
+                    },
+                    {
+                        "type": "CONTAINS",
+                        "parameter": [
+                            {"type": "TEMPLATE", "key": "arg0", "value": "{{Page Path}}"},
+                            {"type": "TEMPLATE", "key": "arg1", "value": "wp-admin"},
+                            {"type": "BOOLEAN", "key": "negate", "value": "true"}
+                        ]
                     }
-                ]
+                ],
+                "eventName": {
+                    "type": "TEMPLATE",
+                    "value": "gtm.timer"
+                },
+                "interval": {
+                    "type": "TEMPLATE",
+                    "value": "30000"
+                },
+                "limit": {
+                    "type": "TEMPLATE",
+                    "value": "1"
+                }
             }
         ],
         "tag": [
@@ -69,16 +101,8 @@
                             {
                                 "type": "MAP",
                                 "map": [
-                                    {
-                                        "type": "TEMPLATE",
-                                        "key": "parameter",
-                                        "value": "time_on_page_ms"
-                                    },
-                                    {
-                                        "type": "TEMPLATE",
-                                        "key": "parameterValue",
-                                        "value": "{{JS - Time on Page (ms)}}"
-                                    }
+                                    {"type": "TEMPLATE", "key": "parameter", "value": "time_on_page_ms"},
+                                    {"type": "TEMPLATE", "key": "parameterValue", "value": "{{JS - Time on Page (ms)}}"}
                                 ]
                             }
                         ]
@@ -87,11 +111,23 @@
                 "firingTriggerId": [
                     "3009000001"
                 ],
+                "tagFiringOption": "ONCE_PER_EVENT",
                 "consentSettings": {
-                    "consentStatus": "NOT_SET"
+                    "consentStatus": "NEEDED",
+                    "consentType": {
+                        "type": "LIST",
+                        "list": [
+                            {"type": "TEMPLATE", "value": "analytics_storage"}
+                        ]
+                    }
                 }
             }
         ],
-        "builtInVariable": []
+        "builtInVariable": [
+            {
+                "type": "PAGE_PATH",
+                "name": "Page Path"
+            }
+        ]
     }
 }

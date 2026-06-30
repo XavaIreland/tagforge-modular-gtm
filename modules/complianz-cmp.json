@@ -32,14 +32,21 @@
     ],
     "trigger": [
       {
+        "name": "Consent Initialization - All Pages",
+        "triggerId": "3020000004",
+        "type": "CONSENT_INIT"
+      },
+      {
         "name": "CE - cmplz_consent_changed",
         "triggerId": "3020000001",
         "type": "CUSTOM_EVENT",
-        "parameter": [
+        "customEventFilter": [
           {
-            "type": "TEMPLATE",
-            "key": "eventName",
-            "value": "cmplz_consent_changed"
+            "type": "EQUALS",
+            "parameter": [
+              {"type": "TEMPLATE", "key": "arg0", "value": "{{_event}}"},
+              {"type": "TEMPLATE", "key": "arg1", "value": "cmplz_consent_changed"}
+            ]
           }
         ]
       },
@@ -47,16 +54,42 @@
         "name": "CE - cmplz_before_cookiebanner",
         "triggerId": "3020000002",
         "type": "CUSTOM_EVENT",
-        "parameter": [
+        "customEventFilter": [
           {
-            "type": "TEMPLATE",
-            "key": "eventName",
-            "value": "cmplz_before_cookiebanner"
+            "type": "EQUALS",
+            "parameter": [
+              {"type": "TEMPLATE", "key": "arg0", "value": "{{_event}}"},
+              {"type": "TEMPLATE", "key": "arg1", "value": "cmplz_before_cookiebanner"}
+            ]
           }
         ]
       }
     ],
     "tag": [
+      {
+        "name": "Consent Mode v2 - Default",
+        "type": "html",
+        "tagId": "3020000005",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\nwindow.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('consent', 'default', {\n  'ad_storage':              'denied',\n  'ad_user_data':            'denied',\n  'ad_personalization':      'denied',\n  'analytics_storage':       'denied',\n  'functionality_storage':   'denied',\n  'personalization_storage': 'denied',\n  'security_storage':        'granted',\n  'wait_for_update':         500\n});\ngtag('set', 'ads_data_redaction', true);\ngtag('set', 'url_passthrough', true);\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "3020000004"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
       {
         "name": "Complianz - Consent Mode v2 Update",
         "type": "html",
@@ -65,7 +98,7 @@
           {
             "type": "TEMPLATE",
             "key": "html",
-            "value": "<script>\nwindow.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\n\n// Read Complianz consent categories and update Google Consent Mode v2\nvar analyticsConsent  = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('statistics'))  ? 'granted' : 'denied';\nvar marketingConsent  = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('marketing'))   ? 'granted' : 'denied';\nvar functionalConsent = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('functional'))  ? 'granted' : 'denied';\n\ngtag('consent', 'update', {\n  'analytics_storage':       analyticsConsent,\n  'ad_storage':              marketingConsent,\n  'ad_user_data':            marketingConsent,\n  'ad_personalization':      marketingConsent,\n  'functionality_storage':   functionalConsent,\n  'personalization_storage': functionalConsent\n});\n</script>"
+            "value": "<script>\nwindow.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\n\nvar analyticsConsent  = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('statistics'))  ? 'granted' : 'denied';\nvar marketingConsent  = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('marketing'))   ? 'granted' : 'denied';\nvar functionalConsent = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('functional'))  ? 'granted' : 'denied';\n\ngtag('consent', 'update', {\n  'analytics_storage':       analyticsConsent,\n  'ad_storage':              marketingConsent,\n  'ad_user_data':            marketingConsent,\n  'ad_personalization':      marketingConsent,\n  'functionality_storage':   functionalConsent,\n  'personalization_storage': functionalConsent\n});\n</script>"
           },
           {
             "type": "BOOLEAN",
@@ -77,7 +110,7 @@
           "3020000001",
           "3020000002"
         ],
-        "tagFiringOption": "oncePerEvent",
+        "tagFiringOption": "ONCE_PER_EVENT",
         "consentSettings": {
           "consentStatus": "NOT_SET"
         }
