@@ -1,7 +1,7 @@
 # TagForge Modular GTM
 ## WordPress / WooCommerce Plugin
 
-**Version:** 5.2.0
+**Version:** 5.3.0
 **Author:** Amit Wadhwa · [xava.ie](https://xava.ie)
 **Plugin URI:** [tagforge.io](https://tagforge.io)
 **Requires:** WordPress 6.0+, WooCommerce 8.0+, PHP 8.0+
@@ -236,6 +236,25 @@ tagforge-modular-gtm/
 └── modules/
     └── [25 JSON module files]
 ```
+
+---
+
+## Changelog
+
+### 5.3.0 — 2026-06-30
+- **Master Export admin screen** (`TagForge > Master Export`): assembles every module in `/modules/` into a single GTM container for full-stack testing. Auto-discovers all `{{PLACEHOLDER}}` keys from JSON files — new modules surface new ID fields automatically.
+- ID fields persist between sessions via `wp_options`.
+- Modules with no ID provided are automatically excluded from the export (e.g. leave Google Ads blank → both conversion and remarketing modules are dropped). Skipped modules listed in the success notice.
+- Mutually exclusive CMP selector (Complianz / Consentmo / Cookiebot / None). Cookiebot Domain ID field shown/hidden by JS.
+- Export summary shows module count, tags, triggers and variables assembled.
+
+### 5.2.1
+- Factory: `consent-mode-v2` auto-suppressed when self-managing CMP present
+- Trigger enum normalisation fixes (`SCROLL_DEPTH`, `CUSTOM_EVENT`)
+- Parameter type uppercasing throughout (`TEMPLATE`, `BOOLEAN`, `LIST`, `MAP`)
+- `normalise_for_gtm`: GA4 event tags (`gaawe`) auto-inject `measurementIdOverride`
+- Deduplication of tags, triggers, variables and builtInVariables across merged modules
+- Consent type application per tag type (`analytics_storage`, `ad_storage + ad_user_data`)
 
 ---
 
