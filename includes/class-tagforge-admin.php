@@ -214,9 +214,43 @@ class Admin {
             $chosen_cmp = sanitize_key( $_POST['tf_cmp'] ?? 'none' );
             $cmp_slug   = isset( $cmp_opts[ $chosen_cmp ] ) ? $cmp_opts[ $chosen_cmp ]['slug'] : null;
 
-            // Build slug list: all non-CMP modules + chosen CMP (if any)
-            $slugs = $non_cmp;
-            if ( $cmp_slug ) {
+            // Drop modules whose required placeholders are all blank.
+            // Build a map of placeholder key => filled (true/false).
+            $filled = array_filter( $vars, fn( $v ) => $v !== '' );
+
+            // For each placeholder, which module slugs depend on it exclusively?
+            $placeholder_owns = [
+                'PIXEL_ID'            => [ 'facebook-pixel', 'facebook-events' ],
+                'GADS_CONVERSION_ID'  => [ 'google-ads-conversion', 'google-ads-remarketing' ],
+                'GADS_CONVERSION_LABEL' => [ 'google-ads-conversion' ],
+                'LI_PARTNER_ID'       => [ 'linkedin-insight' ],
+                'TIKTOK_PIXEL_ID'     => [ 'tiktok-pixel' ],
+                'PINTEREST_TAG_ID'    => [ 'pinterest-tag' ],
+                'BING_UET_TAG_ID'     => [ 'bing-uet' ],
+                'HOTJAR_SITE_ID'      => [ 'hotjar' ],
+                'CLARITY_PROJECT_ID'  => [ 'microsoft-clarity' ],
+                'COOKIEBOT_DOMAIN_ID' => [ 'cookiebot-cmp' ],
+            ];
+
+            $drop = [];
+            foreach ( $placeholder_owns as $key => $owned_slugs ) {
+                if ( empty( $vars[ $key ] ) ) {
+                    foreach ( $owned_slugs as $s ) {
+                        $drop[ $s ] = true;
+                    }
+                }
+            }
+
+            // GA4 blank: drop GA4-dependent modules
+            if ( empty( $vars['GA4_MEASUREMENT_ID'] ) ) {
+                foreach ( [ 'gtag-basic', 'ecom-base', 'ecom-advanced' ] as $s ) {
+                    $drop[ $s ] = true;
+                }
+            }
+
+            // Build slug list: all non-CMP modules minus dropped + chosen CMP (if any)
+            $slugs = array_values( array_filter( $non_cmp, fn( $s ) => ! isset( $drop[ $s ] ) ) );
+            if ( $cmp_slug && ! isset( $drop[ $cmp_slug ] ) ) {
                 $slugs[] = $cmp_slug;
             }
 
@@ -234,15 +268,21 @@ class Admin {
                 $trigger_count = count( $export['containerVersion']['trigger'] ?? [] );
                 $var_count    = count( $export['containerVersion']['variable'] ?? [] );
 
+                $dropped_note = ! empty( $drop )
+                    ? '<p style="color:#856404;background:#fff3cd;border:1px solid #ffc107;padding:6px 10px;border-radius:4px;font-size:12px">Skipped (no ID provided): <strong>' . esc_html( implode( ', ', array_keys( $drop ) ) ) . '</strong></p>'
+                    : '';
+
                 $download_html = sprintf(
                     '<div class="notice notice-success" style="padding:16px">
                         <h3 style="margin-top:0">Master container generated</h3>
                         <p><strong>%d modules</strong> &rarr; %d tags, %d triggers, %d variables</p>
+                        %s
                         <p><a class="button button-primary" href="%s">Download master-container.json &darr;</a>
                         &nbsp; <em style="color:#666;font-size:12px">Link expires in 7 days</em></p>
                         <p style="font-size:12px;color:#666">In GTM: Admin &rsaquo; Import Container &rsaquo; Choose file &rsaquo; <strong>New</strong> workspace &rsaquo; Merge &rsaquo; Confirm</p>
                     </div>',
                     $module_count, $tag_count, $trigger_count, $var_count,
+                    $dropped_note,
                     esc_url( $url )
                 );
             } catch ( \Throwable $e ) {
