@@ -6,6 +6,7 @@ class Admin {
         add_menu_page('TagForge', 'TagForge', 'manage_woocommerce', 'tagforge', [__CLASS__,'render_settings_page'], 'dashicons-analytics', 56);
         add_submenu_page('tagforge', 'Settings', 'Settings', 'manage_woocommerce', 'tagforge', [__CLASS__,'render_settings_page']);
         add_submenu_page('tagforge', 'Admin Test', 'Admin Test', 'manage_woocommerce', 'tagforge-test', [__CLASS__,'render_test_page']);
+        add_submenu_page('tagforge', 'Master Export', 'Master Export', 'manage_woocommerce', 'tagforge-master', [__CLASS__,'render_master_export_page']);
         add_submenu_page('tagforge', 'Readme / Changelog', 'Readme', 'manage_woocommerce', 'tagforge-readme', [__CLASS__,'render_readme']);
     }
     public static function register_settings() : void {
@@ -76,6 +77,289 @@ class Admin {
         if (file_exists($file)) { echo '<pre style="white-space:pre-wrap">' . esc_html(file_get_contents($file)) . '</pre>'; }
         else { echo '<p>No README found.</p>'; }
         echo '</div>';
+    }
+
+    /**
+     * Human-readable labels and descriptions for known placeholder keys.
+     */
+    private static function placeholder_meta() : array {
+        return [
+            'GA4_MEASUREMENT_ID' => [
+                'label' => 'GA4 Measurement ID',
+                'placeholder' => 'G-XXXXXXXXXX',
+                'desc' => 'Google Analytics 4 — found in GA4 > Admin > Data Streams',
+                'modules' => 'gtag-basic, ecom-base, ecom-advanced',
+            ],
+            'PIXEL_ID' => [
+                'label' => 'Meta (Facebook) Pixel ID',
+                'placeholder' => '123456789012345',
+                'desc' => 'Meta Events Manager > Data Sources > Pixel ID',
+                'modules' => 'facebook-pixel, facebook-events',
+            ],
+            'GADS_CONVERSION_ID' => [
+                'label' => 'Google Ads Conversion ID',
+                'placeholder' => 'AW-123456789',
+                'desc' => 'Google Ads > Tools > Conversions > Tag setup',
+                'modules' => 'google-ads-conversion, google-ads-remarketing',
+            ],
+            'GADS_CONVERSION_LABEL' => [
+                'label' => 'Google Ads Conversion Label',
+                'placeholder' => 'AbCdEfGhIjKlMnOp',
+                'desc' => 'Found alongside the Conversion ID in Google Ads',
+                'modules' => 'google-ads-conversion',
+            ],
+            'LI_PARTNER_ID' => [
+                'label' => 'LinkedIn Partner ID',
+                'placeholder' => '1234567',
+                'desc' => 'LinkedIn Campaign Manager > Account Assets > Insight Tag',
+                'modules' => 'linkedin-insight',
+            ],
+            'TIKTOK_PIXEL_ID' => [
+                'label' => 'TikTok Pixel ID',
+                'placeholder' => 'ABCDE12345',
+                'desc' => 'TikTok Ads Manager > Assets > Events > Pixel',
+                'modules' => 'tiktok-pixel',
+            ],
+            'PINTEREST_TAG_ID' => [
+                'label' => 'Pinterest Tag ID',
+                'placeholder' => '1234567890123',
+                'desc' => 'Pinterest Ads > Conversions > Pinterest tag',
+                'modules' => 'pinterest-tag',
+            ],
+            'BING_UET_TAG_ID' => [
+                'label' => 'Bing / Microsoft UET Tag ID',
+                'placeholder' => '12345678',
+                'desc' => 'Microsoft Advertising > Tools > UET tags',
+                'modules' => 'bing-uet',
+            ],
+            'HOTJAR_SITE_ID' => [
+                'label' => 'Hotjar Site ID',
+                'placeholder' => '1234567',
+                'desc' => 'Hotjar > Settings > Site ID',
+                'modules' => 'hotjar',
+            ],
+            'CLARITY_PROJECT_ID' => [
+                'label' => 'Microsoft Clarity Project ID',
+                'placeholder' => 'abcde12345',
+                'desc' => 'Clarity > Settings > Setup > Project ID',
+                'modules' => 'microsoft-clarity',
+            ],
+            'COOKIEBOT_DOMAIN_ID' => [
+                'label' => 'Cookiebot Domain Group ID',
+                'placeholder' => 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                'desc' => 'Cookiebot > Dashboard > Domain group ID (UUID)',
+                'modules' => 'cookiebot-cmp',
+            ],
+        ];
+    }
+
+    /**
+     * Scan all module JSON files and return every unique {{PLACEHOLDER}} key found.
+     * Auto-discovers new placeholders as new modules are added.
+     */
+    private static function discover_placeholders() : array {
+        $found = [];
+        foreach ( Factory::get_module_map() as $slug => $rel ) {
+            $path = trailingslashit( TAGFORGE_DIR ) . ltrim( $rel, '/' );
+            if ( ! file_exists( $path ) ) continue;
+            $content = file_get_contents( $path );
+            if ( preg_match_all( '/\{\{([A-Z_]+)\}\}/', $content, $m ) ) {
+                foreach ( $m[1] as $key ) {
+                    $found[ $key ] = true;
+                }
+            }
+        }
+        // GA4_MEASUREMENT_ID is injected by Factory::normalise_for_gtm — not in JSON files
+        $found['GA4_MEASUREMENT_ID'] = true;
+        return array_keys( $found );
+    }
+
+    /**
+     * CMP module slugs — mutually exclusive, only one should be included.
+     */
+    private static function cmp_modules() : array {
+        return [
+            'none'          => [ 'label' => 'None (use standalone Consent Mode v2)', 'slug' => null ],
+            'complianz-cmp' => [ 'label' => 'Complianz', 'slug' => 'complianz-cmp' ],
+            'consentmo-cmp' => [ 'label' => 'Consentmo', 'slug' => 'consentmo-cmp' ],
+            'cookiebot-cmp' => [ 'label' => 'Cookiebot', 'slug' => 'cookiebot-cmp' ],
+        ];
+    }
+
+    /**
+     * Master Export page — assembles every module into one testable container.
+     * Automatically picks up new modules and new placeholders as they are added.
+     */
+    public static function render_master_export_page() : void {
+        $meta       = self::placeholder_meta();
+        $cmp_opts   = self::cmp_modules();
+        $all_slugs  = array_keys( Factory::get_module_map() );
+        $cmp_slugs  = array_column( $cmp_opts, 'slug' );
+        $non_cmp    = array_values( array_filter( $all_slugs, fn( $s ) => ! in_array( $s, $cmp_slugs, true ) ) );
+        $placeholders = self::discover_placeholders();
+        $download_html = '';
+        $error_html    = '';
+
+        if ( isset( $_POST['tf_master_nonce'] ) && wp_verify_nonce( $_POST['tf_master_nonce'], 'tf_master_export' ) ) {
+
+            $vars       = [];
+            $saved_vals = [];
+
+            foreach ( $placeholders as $key ) {
+                $raw = sanitize_text_field( $_POST[ 'tf_var_' . $key ] ?? '' );
+                $vars[ $key ] = $raw;
+                $saved_vals[ $key ] = $raw;
+            }
+
+            $chosen_cmp = sanitize_key( $_POST['tf_cmp'] ?? 'none' );
+            $cmp_slug   = isset( $cmp_opts[ $chosen_cmp ] ) ? $cmp_opts[ $chosen_cmp ]['slug'] : null;
+
+            // Build slug list: all non-CMP modules + chosen CMP (if any)
+            $slugs = $non_cmp;
+            if ( $cmp_slug ) {
+                $slugs[] = $cmp_slug;
+            }
+
+            try {
+                $export   = Factory::assemble( $slugs, $vars );
+                $uploads  = Helpers::uploads_dir();
+                $filename = 'tagforge-master-' . date( 'Y-m-d-His' ) . '.json';
+                $path     = $uploads['basedir'] . $filename;
+                file_put_contents( $path, wp_json_encode( $export, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
+                $expires  = time() + 7 * DAY_IN_SECONDS;
+                $url      = Helpers::download_url( $path, $expires, 0 );
+
+                $module_count = count( $slugs );
+                $tag_count    = count( $export['containerVersion']['tag'] ?? [] );
+                $trigger_count = count( $export['containerVersion']['trigger'] ?? [] );
+                $var_count    = count( $export['containerVersion']['variable'] ?? [] );
+
+                $download_html = sprintf(
+                    '<div class="notice notice-success" style="padding:16px">
+                        <h3 style="margin-top:0">Master container generated</h3>
+                        <p><strong>%d modules</strong> &rarr; %d tags, %d triggers, %d variables</p>
+                        <p><a class="button button-primary" href="%s">Download master-container.json &darr;</a>
+                        &nbsp; <em style="color:#666;font-size:12px">Link expires in 7 days</em></p>
+                        <p style="font-size:12px;color:#666">In GTM: Admin &rsaquo; Import Container &rsaquo; Choose file &rsaquo; <strong>New</strong> workspace &rsaquo; Merge &rsaquo; Confirm</p>
+                    </div>',
+                    $module_count, $tag_count, $trigger_count, $var_count,
+                    esc_url( $url )
+                );
+            } catch ( \Throwable $e ) {
+                $error_html = '<div class="notice notice-error"><p><strong>Error:</strong> ' . esc_html( $e->getMessage() ) . '</p></div>';
+            }
+        }
+
+        // Prefill from last POST or saved option
+        $saved = get_option( 'tagforge_master_ids', [] );
+        if ( ! empty( $_POST['tf_master_nonce'] ) ) {
+            foreach ( $placeholders as $key ) {
+                $saved[ $key ] = sanitize_text_field( $_POST[ 'tf_var_' . $key ] ?? '' );
+            }
+            $saved['cmp'] = sanitize_key( $_POST['tf_cmp'] ?? 'none' );
+            update_option( 'tagforge_master_ids', $saved );
+        }
+
+        $chosen_cmp = $saved['cmp'] ?? 'none';
+        ?>
+        <div class="wrap">
+        <h1>TagForge — Master Export</h1>
+        <p style="max-width:680px;color:#555">
+            Assembles <strong>every module</strong> in <code>/modules/</code> into one container for full stack testing.
+            Fill in the IDs you want replaced; blank fields leave the <code>{{PLACEHOLDER}}</code> token in place (fine for testing).
+            Select your CMP — only one can be active per container.
+        </p>
+
+        <?php echo $download_html; echo $error_html; ?>
+
+        <form method="post" style="max-width:800px">
+            <?php wp_nonce_field( 'tf_master_export', 'tf_master_nonce' ); ?>
+
+            <h2 style="border-bottom:2px solid #E70028;padding-bottom:6px">Tracking IDs</h2>
+            <table class="form-table" style="max-width:800px">
+            <tbody>
+            <?php
+            // Render fields in a defined order (meta keys first, then any unknown discovered ones)
+            $ordered = array_keys( $meta );
+            $extras  = array_diff( $placeholders, $ordered, [ 'COOKIEBOT_DOMAIN_ID' ] );
+            $render_keys = array_merge( array_diff( $ordered, [ 'COOKIEBOT_DOMAIN_ID' ] ), $extras );
+
+            foreach ( $render_keys as $key ) :
+                $m     = $meta[ $key ] ?? [ 'label' => $key, 'placeholder' => '', 'desc' => '', 'modules' => '' ];
+                $value = esc_attr( $saved[ $key ] ?? '' );
+                ?>
+                <tr>
+                    <th scope="row" style="width:220px">
+                        <label for="tf_<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $m['label'] ); ?></label>
+                    </th>
+                    <td>
+                        <input type="text"
+                               id="tf_<?php echo esc_attr( $key ); ?>"
+                               name="tf_var_<?php echo esc_attr( $key ); ?>"
+                               value="<?php echo $value; ?>"
+                               placeholder="<?php echo esc_attr( $m['placeholder'] ); ?>"
+                               class="regular-text"
+                        />
+                        <?php if ( $m['desc'] ) : ?>
+                            <p class="description"><?php echo esc_html( $m['desc'] ); ?>
+                            <?php if ( $m['modules'] ) : ?>
+                                &mdash; <em>used by: <?php echo esc_html( $m['modules'] ); ?></em>
+                            <?php endif; ?>
+                            </p>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+            </table>
+
+            <h2 style="border-bottom:2px solid #E70028;padding-bottom:6px;margin-top:28px">Consent Management Platform (CMP)</h2>
+            <table class="form-table" style="max-width:800px">
+            <tbody>
+            <tr>
+                <th scope="row">CMP Module</th>
+                <td>
+                <?php foreach ( $cmp_opts as $val => $opt ) : ?>
+                    <label style="display:block;margin-bottom:6px">
+                        <input type="radio" name="tf_cmp" value="<?php echo esc_attr( $val ); ?>"
+                            <?php checked( $chosen_cmp, $val ); ?>
+                            onchange="document.getElementById('tf-cookiebot-row').style.display=this.value==='cookiebot-cmp'?'':'none'"
+                        />
+                        <?php echo esc_html( $opt['label'] ); ?>
+                    </label>
+                <?php endforeach; ?>
+                </td>
+            </tr>
+            <tr id="tf-cookiebot-row" style="<?php echo $chosen_cmp === 'cookiebot-cmp' ? '' : 'display:none'; ?>">
+                <th scope="row">
+                    <label for="tf_COOKIEBOT_DOMAIN_ID"><?php echo esc_html( $meta['COOKIEBOT_DOMAIN_ID']['label'] ); ?></label>
+                </th>
+                <td>
+                    <input type="text"
+                           id="tf_COOKIEBOT_DOMAIN_ID"
+                           name="tf_var_COOKIEBOT_DOMAIN_ID"
+                           value="<?php echo esc_attr( $saved['COOKIEBOT_DOMAIN_ID'] ?? '' ); ?>"
+                           placeholder="<?php echo esc_attr( $meta['COOKIEBOT_DOMAIN_ID']['placeholder'] ); ?>"
+                           class="regular-text"
+                    />
+                    <p class="description"><?php echo esc_html( $meta['COOKIEBOT_DOMAIN_ID']['desc'] ); ?></p>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+
+            <h2 style="border-bottom:2px solid #E70028;padding-bottom:6px;margin-top:28px">Modules in this export</h2>
+            <p style="color:#555;font-size:13px">All <?php echo count( $non_cmp ); ?> non-CMP modules are always included. CMP module depends on selection above.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px">
+            <?php foreach ( $non_cmp as $slug ) : ?>
+                <code style="background:#f0f0f1;padding:3px 8px;border-radius:4px;font-size:12px"><?php echo esc_html( $slug ); ?></code>
+            <?php endforeach; ?>
+            </div>
+
+            <?php submit_button( 'Generate Master Container', 'primary large' ); ?>
+        </form>
+        </div>
+        <?php
     }
 
     /**
