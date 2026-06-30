@@ -1,0 +1,87 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [
+      {
+        "name": "JS - Time on Page (ms)",
+        "type": "jsm",
+        "variableId": "3009000010",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  if(!window._tagforge_page_start) window._tagforge_page_start = Date.now();\n  return Date.now() - window._tagforge_page_start;\n}"
+          }
+        ],
+        "formatValue": {}
+      }
+    ],
+    "trigger": [
+      {
+        "name": "Timer - 30s engagement",
+        "triggerId": "3009000001",
+        "type": "TIMER",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "interval",
+            "value": "30000"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "limit",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "GA4 - Event - engaged_30s",
+        "type": "gaawe",
+        "tagId": "3009000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "engaged_30s"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "time_on_page_ms"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{JS - Time on Page (ms)}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "3009000001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

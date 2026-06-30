@@ -1,0 +1,60 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "All Pages",
+        "triggerId": "3003000001",
+        "type": "PAGEVIEW",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "gtm.js"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "TikTok Pixel - Pageview",
+        "type": "html",
+        "tagId": "3003000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\n!function (w, d, t) {\n  w.TiktokAnalyticsObject=t;\n  var ttq=w[t]=w[t]||[];\n  ttq.methods=['page','track','identify','instances','debug','on','off','once','ready','alias','group','enableCookie','disableCookie'];\n  ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};\n  for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);\n  ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};\n  ttq.load=function(e,n){var i='https://analytics.tiktok.com/i18n/pixel/events.js';\n  ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=i;ttq._t=ttq._t||{};ttq._t[e]=+new Date;\n  ttq._o=ttq._o||{};ttq._o[e]=n||{};\n  var o=document.createElement('script');o.type='text/javascript';o.async=!0;o.src=i+'?sdkid='+e+'&lib='+t;\n  var a=document.getElementsByTagName('script')[0];a.parentNode.insertBefore(o,a)};\n  ttq.load('{{TIKTOK_PIXEL_ID}}');\n  ttq.page();\n}(window, document, 'ttq');\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "3003000001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NEEDED",
+          "consentType": {
+            "type": "LIST",
+            "list": [
+              {
+                "type": "TEMPLATE",
+                "value": "ad_storage"
+              },
+              {
+                "type": "TEMPLATE",
+                "value": "ad_user_data"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

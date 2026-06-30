@@ -1,0 +1,162 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2026-06-08T00:00:00.000Z",
+  "containerVersion": {
+    "variable": [
+      {
+        "name": "CookieBot Domain ID",
+        "type": "c",
+        "variableId": "2147479570",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "value",
+            "value": "{{COOKIEBOT_DOMAIN_ID}}"
+          }
+        ],
+        "formatValue": {}
+      }
+    ],
+    "trigger": [
+      {
+        "name": "Consent Initialization - All Pages",
+        "triggerId": "2147479572",
+        "type": "CONSENT_INIT",
+        "parameter": []
+      },
+      {
+        "name": "CE - cookie_consent_update",
+        "triggerId": "2147479573",
+        "type": "CUSTOM_EVENT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "cookie_consent_update"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "Cookiebot CMP",
+        "type": "cvt_57SF4",
+        "tagId": "2147479574",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "adsDataRedaction",
+            "value": "dynamic"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "addGeoRegion",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "serial",
+            "value": "{{CookieBot Domain ID}}"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "iabFramework",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "cdnRegion",
+            "value": "com"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "advertiserConsentModeEnabled",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "language",
+            "value": "auto"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "urlPassthrough",
+            "value": "false"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "consentModeEnabled",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "waitForUpdate",
+            "value": "2000"
+          },
+          {
+            "type": "LIST",
+            "key": "regionSettings",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "region"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "defaultConsentPreferences",
+                    "value": "denied"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "defaultConsentStatistics",
+                    "value": "denied"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "defaultConsentMarketing",
+                    "value": "denied"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "defaultConsentMarketingAdUserData",
+                    "value": "denied"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "defaultConsentMarketingAdPersonalization",
+                    "value": "denied"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "2147479572"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": [],
+    "customTemplate": [
+      {
+        "name": "Cookiebot CMP",
+        "templateId": "cvt_57SF4",
+        "galleryReference": {
+          "host": "github.com",
+          "owner": "Usercentrics",
+          "repository": "gtm-templates-cookiebot-cmp",
+          "version": "493e3df6a92724b77c2511451322567fe4da7023",
+          "signature": "f256c49405fd3746a40910c6ea930db7778d39ed44450ab0df6030e5d43ea84c",
+          "galleryTemplateId": "57SF4"
+        }
+      }
+    ]
+  }
+}

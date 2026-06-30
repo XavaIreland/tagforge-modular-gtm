@@ -1,0 +1,56 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "All Pages",
+        "triggerId": "3006000001",
+        "type": "PAGEVIEW",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "gtm.js"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "Hotjar",
+        "type": "html",
+        "tagId": "3006000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\n(function(h,o,t,j,a,r){\n  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};\n  h._hjSettings={hjid:{{HOTJAR_SITE_ID}},hjsv:6};\n  a=o.getElementsByTagName('head')[0];\n  r=o.createElement('script');r.async=1;\n  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;\n  a.appendChild(r);\n})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "3006000001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NEEDED",
+          "consentType": {
+            "type": "LIST",
+            "list": [
+              {
+                "type": "TEMPLATE",
+                "value": "analytics_storage"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

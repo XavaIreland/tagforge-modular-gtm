@@ -1,0 +1,88 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [
+      {
+        "name": "JS - Complianz Analytics Consent",
+        "type": "jsm",
+        "variableId": "3020000010",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  if(typeof cmplz_has_consent === 'function') {\n    return cmplz_has_consent('statistics') ? 'granted' : 'denied';\n  }\n  return 'denied';\n}"
+          }
+        ],
+        "formatValue": {}
+      },
+      {
+        "name": "JS - Complianz Marketing Consent",
+        "type": "jsm",
+        "variableId": "3020000011",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "javascript",
+            "value": "function(){\n  if(typeof cmplz_has_consent === 'function') {\n    return cmplz_has_consent('marketing') ? 'granted' : 'denied';\n  }\n  return 'denied';\n}"
+          }
+        ],
+        "formatValue": {}
+      }
+    ],
+    "trigger": [
+      {
+        "name": "CE - cmplz_consent_changed",
+        "triggerId": "3020000001",
+        "type": "CUSTOM_EVENT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "cmplz_consent_changed"
+          }
+        ]
+      },
+      {
+        "name": "CE - cmplz_before_cookiebanner",
+        "triggerId": "3020000002",
+        "type": "CUSTOM_EVENT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "cmplz_before_cookiebanner"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "Complianz - Consent Mode v2 Update",
+        "type": "html",
+        "tagId": "3020000003",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\nwindow.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\n\n// Read Complianz consent categories and update Google Consent Mode v2\nvar analyticsConsent  = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('statistics'))  ? 'granted' : 'denied';\nvar marketingConsent  = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('marketing'))   ? 'granted' : 'denied';\nvar functionalConsent = (typeof cmplz_has_consent === 'function' && cmplz_has_consent('functional'))  ? 'granted' : 'denied';\n\ngtag('consent', 'update', {\n  'analytics_storage':       analyticsConsent,\n  'ad_storage':              marketingConsent,\n  'ad_user_data':            marketingConsent,\n  'ad_personalization':      marketingConsent,\n  'functionality_storage':   functionalConsent,\n  'personalization_storage': functionalConsent\n});\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "3020000001",
+          "3020000002"
+        ],
+        "tagFiringOption": "oncePerEvent",
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

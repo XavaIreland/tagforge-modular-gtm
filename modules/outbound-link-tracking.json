@@ -1,0 +1,117 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "Link Click - Outbound",
+        "triggerId": "3008000001",
+        "type": "LINK_CLICK",
+        "filter": [
+          {
+            "type": "CONTAINS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Click URL}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "http"
+              }
+            ]
+          }
+        ],
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "waitForTags",
+            "value": "true"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "checkValidation",
+            "value": "true"
+          },
+          {
+            "type": "INTEGER",
+            "key": "waitForTagsTimeout",
+            "value": "2000"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "GA4 - Event - outbound_click",
+        "type": "gaawe",
+        "tagId": "3008000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "outbound_click"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "link_url"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{Click URL}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "link_text"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{Click Text}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "3008000001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": [
+      {
+        "type": "CLICK_URL"
+      },
+      {
+        "type": "CLICK_TEXT"
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "All Pages",
+        "triggerId": "3001000001",
+        "type": "PAGEVIEW",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "gtm.js"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "Google Ads - Remarketing",
+        "type": "sp",
+        "tagId": "3001000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "conversionId",
+            "value": "{{GADS_CONVERSION_ID}}"
+          }
+        ],
+        "firingTriggerId": [
+          "3001000001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

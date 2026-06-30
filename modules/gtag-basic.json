@@ -1,0 +1,47 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:01:25.827099Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "All Pages",
+        "triggerId": "2147483600",
+        "type": "PAGEVIEW",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "gtm.js"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "GA4 - Configuration",
+        "type": "googtag",
+        "tagId": "2147483601",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "tagId",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "send_page_view",
+            "value": "true"
+          }
+        ],
+        "firingTriggerId": [
+          "2147483600"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

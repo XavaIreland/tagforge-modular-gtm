@@ -1,0 +1,52 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:01:25.827445Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "Scroll Depth - 25/50/75/100%",
+        "triggerId": "2147483400",
+        "type": "SCROLL_DEPTH",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "verticalThresholdUnits",
+            "value": "PERCENT"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "verticalThresholds",
+            "value": "25,50,75,100"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "GA4 - Event - scroll",
+        "type": "gaawe",
+        "tagId": "2147483401",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "scroll"
+          }
+        ],
+        "firingTriggerId": [
+          "2147483400"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

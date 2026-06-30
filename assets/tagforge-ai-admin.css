@@ -1,0 +1,458 @@
+/* TagForge AI Builder — Admin Styles
+   tagforge-ai-admin.css · v4.0.0
+   Scoped to .tf-ai-wrap — zero bleed into WP core styles */
+
+/* ── Layout ──────────────────────────────────────────────────── */
+
+.tf-ai-wrap {
+    max-width: 1200px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.tf-ai-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tf-ai-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tf-ai-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8C167B, #E70028, #F3882A);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.tf-ai-header__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e2130;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.tf-ai-header__version {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 3px;
+    display: block;
+}
+
+.tf-ai-header__actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* ── Two-column grid ─────────────────────────────────────────── */
+
+.tf-ai-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.tf-ai-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Cards ───────────────────────────────────────────────────── */
+
+.tf-ai-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px 24px;
+}
+
+.tf-ai-card--info {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+}
+
+.tf-ai-card__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e2130;
+    margin: 0 0 6px;
+    padding: 0;
+    border: none;
+}
+
+.tf-ai-card__desc {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 16px;
+    line-height: 1.5;
+}
+
+/* ── Key field ───────────────────────────────────────────────── */
+
+.tf-ai-field-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.tf-ai-input {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 13px;
+    color: #1e2130;
+    outline: none;
+    transition: border-color .15s;
+}
+
+.tf-ai-input:focus {
+    border-color: #E70028;
+    box-shadow: 0 0 0 2px rgba(231, 0, 40, .1);
+}
+
+.tf-ai-input--wide { flex: 1; min-width: 0; }
+.tf-ai-input--num  { width: 70px; text-align: center; }
+
+/* ── Key status ──────────────────────────────────────────────── */
+
+.tf-ai-key-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+}
+
+.tf-ai-key-status--set     { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.tf-ai-key-status--missing { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+.tf-ai-key-status--testing { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+
+.tf-ai-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.tf-ai-dot--green { background: #22c55e; }
+.tf-ai-dot--red   { background: #ef4444; }
+.tf-ai-dot--amber { background: #f59e0b; }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+
+.tf-ai-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: opacity .15s, background .15s;
+}
+
+.tf-ai-btn--primary {
+    background: linear-gradient(135deg, #8C167B, #E70028);
+    color: #fff;
+}
+
+.tf-ai-btn--secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.tf-ai-btn--danger {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.tf-ai-btn:hover    { opacity: .85; }
+.tf-ai-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── Save messages ───────────────────────────────────────────── */
+
+.tf-ai-save-msg {
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 4px;
+    transition: opacity .3s;
+}
+
+.tf-ai-save-msg--ok  { color: #166534; }
+.tf-ai-save-msg--err { color: #991b1b; }
+
+/* ── Limits table ────────────────────────────────────────────── */
+
+.tf-ai-limits-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tf-ai-limits-table tr {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.tf-ai-limits-table tr:last-child { border-bottom: none; }
+
+.tf-ai-limits-table td {
+    padding: 10px 0;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.tf-ai-limits-table td:last-child { text-align: right; }
+
+.tf-ai-limits-table__label {
+    color: #374151;
+    font-weight: 500;
+}
+
+.tf-ai-hint {
+    display: block;
+    font-size: 11px;
+    color: #9ca3af;
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+/* ── Stat grid ───────────────────────────────────────────────── */
+
+.tf-ai-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.tf-ai-stat {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: center;
+}
+
+.tf-ai-stat__num {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1e2130;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.tf-ai-stat__label {
+    font-size: 11px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tf-ai-conversion {
+    font-size: 13px;
+    color: #374151;
+    padding-top: 8px;
+    border-top: 1px solid #f3f4f6;
+}
+
+/* ── Data actions ────────────────────────────────────────────── */
+
+.tf-ai-data-actions { display: flex; flex-direction: column; gap: 12px; }
+
+.tf-ai-data-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 13px;
+}
+
+.tf-ai-data-row:last-child { border-bottom: none; }
+.tf-ai-data-row strong     { display: block; color: #374151; }
+
+/* ── How it works list ───────────────────────────────────────── */
+
+.tf-ai-how-list {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.8;
+}
+
+/* ── Status tabs (sessions page) ─────────────────────────────── */
+
+.tf-ai-status-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0;
+}
+
+.tf-ai-status-tab {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .15s;
+}
+
+.tf-ai-status-tab:hover         { color: #E70028; }
+.tf-ai-status-tab--active       { color: #E70028; border-bottom-color: #E70028; }
+
+/* ── Sessions table ──────────────────────────────────────────── */
+
+.tf-ai-sessions-table { margin-top: 0; }
+
+.tf-ai-session-answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.tf-ai-answer-chip {
+    display: inline-block;
+    padding: 2px 7px;
+    background: #f3f4f6;
+    border-radius: 10px;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.tf-ai-module-count {
+    display: inline-block;
+    padding: 3px 8px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: help;
+}
+
+/* ── Status pills ────────────────────────────────────────────── */
+
+.tf-ai-status-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.tf-ai-status--active    { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.tf-ai-status--purchased { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.tf-ai-status--expired   { background: #f9fafb; color: #9ca3af; border: 1px solid #e5e7eb; }
+
+/* ── Refinement count ────────────────────────────────────────── */
+
+.tf-ai-refine-count { font-size: 12px; color: #6b7280; }
+.tf-ai-refine-count--max { color: #991b1b; font-weight: 600; }
+
+/* ── Flag button ─────────────────────────────────────────────── */
+
+.tf-ai-flag-btn {
+    background: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all .15s;
+}
+
+.tf-ai-flag-btn:hover       { border-color: #E70028; color: #E70028; }
+.tf-ai-flag-btn--active     { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
+
+/* ── Pagination ──────────────────────────────────────────────── */
+
+.tf-ai-pagination {
+    display: flex;
+    gap: 4px;
+    margin-top: 16px;
+    justify-content: flex-end;
+}
+
+.tf-ai-page-btn {
+    padding: 5px 11px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    text-decoration: none;
+    border: 1px solid #e5e7eb;
+    transition: all .15s;
+}
+
+.tf-ai-page-btn:hover       { border-color: #E70028; color: #E70028; }
+.tf-ai-page-btn--active     { background: #E70028; color: #fff; border-color: #E70028; }
+
+/* ── v5.2 — Shortcodes page additions ─────────────────────────────── */
+.tf-ai-col--wide {
+    grid-column: 1 / -1;
+}
+
+.tf-ai-code-block {
+    background: #1e1e2e;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    font-family: 'Courier New', monospace;
+}
+
+.tf-ai-code-block code {
+    display: block;
+    color: #a6e3a1;
+    font-size: 13px;
+    line-height: 1.8;
+    background: none;
+    padding: 0;
+}
+
+.tf-ai-limits-table th {
+    font-weight: 600;
+    background: #f8f9fa;
+    padding: 8px 10px;
+}
+
+.tf-ai-limits-table td code {
+    background: #f1f3f4;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+}

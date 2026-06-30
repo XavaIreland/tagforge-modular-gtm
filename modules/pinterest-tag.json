@@ -1,0 +1,60 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "All Pages",
+        "triggerId": "3004000001",
+        "type": "PAGEVIEW",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "gtm.js"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "Pinterest Tag - Pageview",
+        "type": "html",
+        "tagId": "3004000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\n!function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};\nvar n=window.pintrk;n.queue=[],n.version='3.0';\nvar t=document.createElement('script');t.async=!0,t.src=e;\nvar r=document.getElementsByTagName('script')[0];r.parentNode.insertBefore(t,r)}}\n('https://s.pinimg.com/ct/core.js');\npintrk('load', '{{PINTEREST_TAG_ID}}');\npintrk('page');\n</script>\n<noscript><img height='1' width='1' style='display:none;' alt='' src='https://ct.pinterest.com/v3/?tid={{PINTEREST_TAG_ID}}&event=init&noscript=1' /></noscript>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "3004000001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NEEDED",
+          "consentType": {
+            "type": "LIST",
+            "list": [
+              {
+                "type": "TEMPLATE",
+                "value": "ad_storage"
+              },
+              {
+                "type": "TEMPLATE",
+                "value": "ad_user_data"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

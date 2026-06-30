@@ -1,0 +1,60 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "All Pages",
+        "triggerId": "3010000001",
+        "type": "PAGEVIEW",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "gtm.js"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "Microsoft UET Tag",
+        "type": "html",
+        "tagId": "3010000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\n(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:'{{BING_UET_TAG_ID}}',enableAutoSpaTracking:true};\no.q=w[u],w[u]=new UET(o),w[u].push('pageLoad')};\nn=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;\ns&&s!=='loaded'&&s!=='complete'||(f(),n.onload=n.onreadystatechange=null)};\ni=d.getElementsByTagName(t)[0];i.parentNode.insertBefore(n,i)\n})(window,document,'script','//bat.bing.com/bat.js','uetq');\n</script>\n<noscript><img src='https://bat.bing.com/action/0?ti={{BING_UET_TAG_ID}}&Ver=2' height='0' width='0' style='display:none; visibility:hidden;' /></noscript>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "3010000001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NEEDED",
+          "consentType": {
+            "type": "LIST",
+            "list": [
+              {
+                "type": "TEMPLATE",
+                "value": "ad_storage"
+              },
+              {
+                "type": "TEMPLATE",
+                "value": "ad_user_data"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

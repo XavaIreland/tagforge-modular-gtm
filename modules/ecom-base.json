@@ -1,0 +1,152 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:01:25.828205Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "CE - view_item",
+        "triggerId": "2147483001",
+        "type": "CUSTOM_EVENT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "view_item"
+          }
+        ]
+      },
+      {
+        "name": "CE - add_to_cart",
+        "triggerId": "2147483002",
+        "type": "CUSTOM_EVENT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "add_to_cart"
+          }
+        ]
+      },
+      {
+        "name": "CE - begin_checkout",
+        "triggerId": "2147483003",
+        "type": "CUSTOM_EVENT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "begin_checkout"
+          }
+        ]
+      },
+      {
+        "name": "CE - purchase",
+        "triggerId": "2147483004",
+        "type": "CUSTOM_EVENT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "purchase"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "GA4 - Event - view_item",
+        "type": "gaawe",
+        "tagId": "2147483005",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "view_item"
+          }
+        ],
+        "firingTriggerId": [
+          "2147483001"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
+      {
+        "name": "GA4 - Event - add_to_cart",
+        "type": "gaawe",
+        "tagId": "2147483006",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "add_to_cart"
+          }
+        ],
+        "firingTriggerId": [
+          "2147483002"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
+      {
+        "name": "GA4 - Event - begin_checkout",
+        "type": "gaawe",
+        "tagId": "2147483007",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "begin_checkout"
+          }
+        ],
+        "firingTriggerId": [
+          "2147483003"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      },
+      {
+        "name": "GA4 - Event - purchase",
+        "type": "gaawe",
+        "tagId": "2147483008",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "purchase"
+          }
+        ],
+        "firingTriggerId": [
+          "2147483004"
+        ],
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}

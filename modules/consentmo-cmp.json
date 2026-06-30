@@ -1,0 +1,86 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2026-06-08T00:00:00.000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "Consent Initialization - All Pages",
+        "triggerId": "2147479572",
+        "type": "CONSENT_INIT",
+        "parameter": []
+      }
+    ],
+    "tag": [
+      {
+        "name": "Consent Mo Tag",
+        "type": "cvt_WKT33",
+        "tagId": "2147479573",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "analytics",
+            "value": "denied"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "marketing",
+            "value": "denied"
+          },
+          {
+            "type": "INTEGER",
+            "key": "setDefaultConsent",
+            "value": "1"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "adsDataRedaction",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "functionality",
+            "value": "denied"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "urlPassthrough",
+            "value": "true"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "waitForUpdate",
+            "value": "500"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "discardInitConsentSignal",
+            "value": "true"
+          }
+        ],
+        "firingTriggerId": [
+          "2147479572"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": [],
+    "customTemplate": [
+      {
+        "name": "Consentmo GDPR CMP",
+        "templateId": "cvt_WKT33",
+        "galleryReference": {
+          "host": "github.com",
+          "owner": "consentmo",
+          "repository": "consentmo_cmp",
+          "version": "0f010a2f121fe2dfad564a904829ef9204352d98",
+          "signature": "5c4a00be45c3b01bc39fe36b90096f3b6809b3b9e2b951e1e70be8ce1856d2d6",
+          "galleryTemplateId": "WKT33"
+        }
+      }
+    ]
+  }
+}

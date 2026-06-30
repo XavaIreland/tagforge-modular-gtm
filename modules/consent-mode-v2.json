@@ -1,0 +1,48 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2025-10-21T09:00:00.000000Z",
+  "containerVersion": {
+    "variable": [],
+    "trigger": [
+      {
+        "name": "Consent Initialization - All Pages",
+        "triggerId": "3002000001",
+        "type": "CONSENT_INIT",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "gtm.init_consent"
+          }
+        ]
+      }
+    ],
+    "tag": [
+      {
+        "name": "Consent Mode v2 - Default",
+        "type": "html",
+        "tagId": "3002000002",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "html",
+            "value": "<script>\nwindow.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('consent', 'default', {\n  'ad_storage':              'denied',\n  'ad_user_data':            'denied',\n  'ad_personalization':      'denied',\n  'analytics_storage':       'denied',\n  'functionality_storage':   'denied',\n  'personalization_storage': 'denied',\n  'security_storage':        'granted',\n  'wait_for_update':         500\n});\ngtag('set', 'ads_data_redaction', true);\ngtag('set', 'url_passthrough', true);\n</script>"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "supportDocumentWrite",
+            "value": "false"
+          }
+        ],
+        "firingTriggerId": [
+          "3002000001"
+        ],
+        "tagFiringOption": "oncePerEvent",
+        "consentSettings": {
+          "consentStatus": "NOT_SET"
+        }
+      }
+    ],
+    "builtInVariable": []
+  }
+}
