@@ -2,7 +2,20 @@
   "exportFormatVersion": 2,
   "exportTime": "2025-10-21T09:01:25.827099Z",
   "containerVersion": {
-    "variable": [],
+    "variable": [
+      {
+        "name": "GA4 Measurement ID",
+        "type": "c",
+        "variableId": "2147483605",
+        "parameter": [
+          {
+            "type": "TEMPLATE",
+            "key": "value",
+            "value": "{{GA4_MEASUREMENT_ID}}"
+          }
+        ]
+      }
+    ],
     "trigger": [
       {
         "name": "All Pages",

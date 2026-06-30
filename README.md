@@ -1,7 +1,7 @@
 # TagForge Modular GTM
 ## WordPress / WooCommerce Plugin
 
-**Version:** 5.3.0
+**Version:** 5.3.1
 **Author:** Amit Wadhwa · [xava.ie](https://xava.ie)
 **Plugin URI:** [tagforge.io](https://tagforge.io)
 **Requires:** WordPress 6.0+, WooCommerce 8.0+, PHP 8.0+
