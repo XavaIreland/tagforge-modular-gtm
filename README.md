@@ -1,7 +1,7 @@
 # TagForge Modular GTM
 ## WordPress / WooCommerce Plugin
 
-**Version:** 5.3.1
+**Version:** 6.0.0
 **Author:** Amit Wadhwa · [xava.ie](https://xava.ie)
 **Plugin URI:** [tagforge.io](https://tagforge.io)
 **Requires:** WordPress 6.0+, WooCommerce 8.0+, PHP 8.0+
@@ -16,6 +16,37 @@ TagForge Modular GTM assembles, pre-fills and delivers ready-to-import Google Ta
 ---
 
 ## Changelog
+
+### 6.0.0 — 2026-07-01 — Two-Stream Architecture
+
+**AI Builder — conversation reorder**
+- CMP question moved to Q1 (was Q4) — consent tool is now the first thing the builder asks, as it determines the assembly path and often reveals the platform (Complianz = WordPress, Consentmo = Shopify)
+- Platform question moved to Q2 — skipped or confirmed if Q1 already revealed it
+- Goal question moved to Q3; Paid advertising moved to Q4
+- Both `qualify` and `qualify_conversational` phases updated to match the new order
+
+**AI Builder — new rules and advisories**
+- Complianz module description updated: now explicitly states it covers both Complianz FREE and Complianz PRO with no upgrade required
+- When a CMP module is included in the recommendation: builder informs customer that trigger wiring is handled automatically — no manual GTM configuration needed
+- When no CMP is selected on a WordPress site: builder recommends Complianz naturally and surfaces the affiliate link (configurable via `complianz_affiliate_url` option)
+- When the container has no CMP: builder notes the container uses Google Consent Mode v2 enforcement and works with any CMP that sends standard gtag consent update calls
+- **Shopify non-Plus checkout advisory**: builder detects Shopify + GA4 ecommerce combination and warns that GTM cannot reach checkout pages on non-Plus plans. `ecom-advanced` excluded from Shopify recommendations. Builder recommends the native Shopify Google & YouTube app / Customer Pixels as the fix for purchase tracking — framed as a helpful tip
+
+**AI Builder — affiliate integration**
+- `complianz_affiliate_url` option added to plugin settings (falls back to `https://www.complianz.io/?ref=tagforge`)
+- Affiliate URL injected into system prompt so Claude surfaces it naturally when recommending Complianz to undecided WordPress customers
+
+**Architecture spec — two-stream factory (design complete, implementation pending)**
+- Path A: generic containers — correct `consentSettings` via `apply_consent_types()`, GCM v2 enforcement only, no CMP trigger wiring
+- Path B: CMP-specific containers — same assembly as Path A, plus CMP community tag and `trigger_override` mechanism to rewire NEEDED tags off "All Pages" → CMP consent events
+- `apply_trigger_overrides()` method specified: reads `_tagforge.cmp_consent_triggers` from CMP module JSON, finds those trigger IDs post-dedup, replaces "All Pages" firing trigger on all NEEDED tags
+- `apply_consent_types()` to be extracted out of `normalise_for_gtm()` as a prerequisite for trigger override ordering
+
+**Complianz module (pending live test confirmation)**
+- MATCH_REGEX trigger `cmplz_event_.*` covers all Complianz FREE category events (`cmplz_event_statistics`, `cmplz_event_marketing` etc.)
+- Existing PRO triggers (`cmplz_consent_changed`, `cmplz_before_cookiebanner`) retained
+- Single consent update tag fires on all three triggers — covers Free and Pro in one container
+- Module update held until live GTM test confirmed working
 
 ### 5.3.0 — 2026-06-30
 - **Master Export admin screen** (`TagForge > Master Export`): assembles every module in `/modules/` into a single GTM container for full-stack testing. Auto-discovers all `{{PLACEHOLDER}}` keys from JSON files — new modules surface new ID fields automatically.
@@ -194,7 +225,7 @@ Renders a form where customers enter their order number and billing email to reg
 | `ecom-base` | GA4 ecommerce base events | Any |
 | `ecom-advanced` | GA4 full ecommerce funnel | Any |
 | `consent-mode-v2` | Consent Mode v2 defaults | Any |
-| `complianz-cmp` | Complianz CMP integration | WordPress |
+| `complianz-cmp` | Complianz CMP integration | WordPress + Shopify |
 | `consentmo-cmp` | Consentmo GDPR CMP | Shopify |
 | `cookiebot-cmp` | Cookiebot/Usercentrics CMP | Any |
 | `facebook-pixel` | Meta Pixel base tag | Any |
@@ -321,6 +352,7 @@ Created on activation. Optionally dropped on deactivation. Always dropped on uni
 | `zoho_endpoint` | — | Zoho Campaigns web-optin endpoint |
 | `zoho_form_id` | — | Zoho form ID |
 | `zoho_uid` | — | Zoho UID |
+| `complianz_affiliate_url` | `https://complianzio.refr.cc/default-campaign/u/amitwadhwa` | Affiliate URL surfaced by AI builder when recommending Complianz to undecided customers |
 
 ---
 
